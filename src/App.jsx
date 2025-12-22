@@ -17,7 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import ProfileDialog from './components/profileDialog.jsx';
 import Typography from '@mui/material/Typography';
-import StarIcon from '@mui/icons-material/Star';
+import SportsBarIcon from '@mui/icons-material/SportsBar';
 import Stack from '@mui/material/Stack';
 
 
@@ -73,14 +73,14 @@ function App() {
   if(user != null){
     const imageUrl = user.image
           ? supabase.storage
-          .from('beer-images')
+          .from('images')
           .getPublicUrl(user.image)
           .data.publicUrl
           : null
     return (
       <>
-    <Box>
-      <AppBar>
+        <Box>
+          <AppBar>
             <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
               <IconButton
                 color='secondary'
@@ -90,36 +90,47 @@ function App() {
                   <LogoutIcon />
               </IconButton>
               {user && <Typography color='secondary' variant='h5'>{user.name}</Typography>}
-              <Avatar variant="rounded" src={imageUrl} onClick={() => setOpenProfileDialog(true)} />
+              <Avatar src={imageUrl} onClick={() => setOpenProfileDialog(true)} />
             </Toolbar>
-        </AppBar>
-      <Box sx={{ marginTop: '80px' }}>
-        {beers.map((beer, index) => {
-          const imageUrl = beer.image
-          ? supabase.storage
-          .from('beer-images')
-          .getPublicUrl(beer.image)
-          .data.publicUrl
-          : null
+          </AppBar>
+        <Box sx={{ mt: 3 }}>
+          {beers.map((beer, index) => {
+            const imageUrl = beer.image
+            ? supabase.storage
+            .from('beer-images')
+            .getPublicUrl(beer.image)
+            .data.publicUrl
+            : null
           
           return (
-            <Box key={beer.id} className="beer" onClick={() => openRateDialogForBeer(index)}>
-              <Typography variant='h5'>{beer.name}</Typography>
-
-              {imageUrl && (
-                <img
-                src={imageUrl}
-                alt={beer.name}
-                style={{ maxWidth: '250px' }}
-                />
-              )}
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 1 }}>
-                {beer.avg_rating ? 
-                <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography variant='h6'>{beer.avg_rating}</Typography><StarIcon color='secondary' size="small"></StarIcon>
-              </Stack> : <Typography variant='h6'>No rating</Typography>  }
-              </Box>
+            <Box key={beer.id}>
               <Divider />
+              <Box 
+                    className="beer" 
+                    onClick={() => openRateDialogForBeer(index)}
+                    sx={{ 
+                      my: 2,
+                    }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, textAlign: "left", width: "100%" }}>
+                  <Typography variant='h6'> {index+1 }. {beer.name}</Typography>
+                </Box>
+
+                {imageUrl && (
+                  <Box sx={{ my: 2}}>
+                    <img
+                      src={imageUrl}
+                      alt={beer.name}
+                      style={{ maxWidth: '250px' }}
+                      />
+                  </Box>
+                )}
+                <Box sx={{ display: 'flex', justifyContent: 'right', gap: 1, mb: 1 }}>
+                  {beer.avg_rating ? 
+                  <Stack direction="row" alignItems="start" spacing={1}>
+                    <Typography variant='subtitle1'>{beer.avg_rating}/5</Typography><SportsBarIcon color='trim' size="small"></SportsBarIcon>
+                  </Stack> : <Typography variant='subtitle1'>No rating</Typography>  }
+                </Box>
+              </Box>
             </Box>
             )
         })}
@@ -134,6 +145,7 @@ function App() {
                   ratings={ratings}
                   setBeers={setBeers}
                   setRatings={setRatings} />
+                  
       <ProfileDialog openProfileDialog={openProfileDialog} 
                      setOpenProfileDialog={setOpenProfileDialog} 
                      imgUrl={imageUrl} />

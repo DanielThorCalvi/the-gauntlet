@@ -18,14 +18,21 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { getRatingByBeerAndUser, updateRating, addRating, fetchRatings } from '../services/ratingService.js';
 import { fetchBeers } from '../services/beerService.js';
 import MapIcon from '@mui/icons-material/Map';
+import ProfileDialog from './profileDialog.jsx';
 
 function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers, setBeers, user, ratings, setRatings }) {
 
   const[loading, setLoading] = useState(false);
+  const [openProfileDialog, setOpenProfileDialog] = useState(false);
 
   const handleClose = () => {
     setOpenRateDialog(false);
   };
+
+  const imageUrl = supabase.storage
+          .from('beer-images')
+          .getPublicUrl('test_beer.jpg')
+          .data.publicUrl
 
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
@@ -41,6 +48,10 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
 
   const nextBeer = () => {
     setIndex((prevIndex) => (prevIndex + 1));
+  }
+
+  const openMap = () => {
+    setOpenProfileDialog(true);
   }
 
   const rateBeer = async (beerId, userId, rating) => {
@@ -65,6 +76,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
           <Dialog
             fullScreen
             open={openRateDialog}
+            scroll='paper'
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -84,6 +96,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                 <IconButton
                   color="secondary"
                   aria-label="map"
+                  onClick={openMap}
                 >
                   <MapIcon />
                 </IconButton>
@@ -99,7 +112,8 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                     objectFit: "cover", // crop
                     display: "block",
                   }}
-                />    
+                />
+      
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2, mb: 2 }}> 
                 { ratings && ratings.length > 0 && ratings.find(x => x.beer_id === beers[index]?.id) ?
                   <>
@@ -135,8 +149,6 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               </Box>
               <DialogContentText id="alert-dialog-description">               
                 {beers[index]?.about}
-                {beers[index]?.about}
-                {beers[index]?.about}
               </DialogContentText>
                 { loading && (
                   <Box
@@ -163,6 +175,10 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               </IconButton>
             </DialogActions>
           </Dialog>
+
+          <ProfileDialog openProfileDialog={openProfileDialog} 
+                        setOpenProfileDialog={setOpenProfileDialog} 
+                        imgUrl={imageUrl} />
         </div>
       }
     </>

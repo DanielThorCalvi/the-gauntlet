@@ -18,6 +18,9 @@ const theme = createTheme({
       main: '#ffb11fff', // orange
     },
   },
+  typography: {
+    fontFamily: `'Space Grotesk', system-ui, -apple-system, sans-serif`,
+  },
 });
 createRoot(document.getElementById('root')).render(
   <StrictMode>
