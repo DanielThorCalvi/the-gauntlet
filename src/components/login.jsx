@@ -38,7 +38,6 @@ function Login({ user, setUser, loading, setLoading, setRatings }) {
       handleClose();
       setLoading(false);
     } catch (error) {
-      console.error('Login failed:', error);
       setLoading(false);
     }
   };
@@ -57,9 +56,9 @@ function Login({ user, setUser, loading, setLoading, setRatings }) {
         <img
           src={getImageUrl('logo.PNG')}
           alt="The Gauntlet Logo"
-          style={{ width: '300px' }}
+          style={{ width: '300px', borderRadius: '8px' }}
         />
-        <Button size="large" variant="contained" onClick={handleClickOpen}>Login</Button>
+        <Button size='large' fullWidth variant="contained" onClick={handleClickOpen}>Login</Button>
         <Dialog
           open={open}
           onClose={handleClose}

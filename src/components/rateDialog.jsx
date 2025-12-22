@@ -17,6 +17,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { getRatingByBeerAndUser, updateRating, addRating, fetchRatings } from '../services/ratingService.js';
 import { fetchBeers } from '../services/beerService.js';
+import MapIcon from '@mui/icons-material/Map';
 
 function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers, setBeers, user, ratings, setRatings }) {
 
@@ -71,7 +72,6 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
             <AppBar >
               <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
                 <IconButton
-                  edge="start"
                   color="secondary"
                   onClick={handleClose}
                   aria-label="close"
@@ -81,22 +81,35 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                 <Typography color='secondary' component="div" variant="h5" >
                   The Gauntlet
                 </Typography>
-                <div></div>
+                <IconButton
+                  color="secondary"
+                  aria-label="map"
+                >
+                  <MapIcon />
+                </IconButton>
               </Toolbar>
             </AppBar>
-            <DialogContent sx={{  alignItems: "center", display: "flex", flexDirection: "column" }}>
-              <Typography variant="h4" gutterBottom sx={{ mt: 8, mb: 2 }}>
-                {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
-              </Typography>
-              <img
-                          src={getImageUrl(beers[index]?.image)}
-                          alt={beers[index]?.name}
-                          style={{ width: '350px' }}
-                          />
-              <DialogContentText id="alert-dialog-description">               
-                {beers[index]?.about}
-              </DialogContentText>
-     
+            <DialogContent sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
+              <Box sx={{
+                    height: 300,
+                    mt: 10,
+                    mb: 2,
+                    aspectRatio: "1 / 1",
+                    overflow: "hidden",
+                    bgcolor: "grey.200",
+                  }}>
+                <img
+                  src={getImageUrl(beers[index]?.image)}
+                  alt={beers[index]?.name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover", // crop
+                    display: "block",
+                  }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2, mb: 2 }}> 
                 { ratings && ratings.length > 0 && ratings.find(x => x.beer_id === beers[index]?.id) ?
                   <>
                     <Stack direction="row" spacing={1}>
@@ -123,6 +136,19 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                     </Stack>
                   </>
                 }
+              </Box>
+              <Box sx={{ mb: 2, textAlign: "left", width: "100%" }}>
+                <Typography textAlign="left" variant="h4" gutterBottom sx={{ mt: 6, mb: 2 }}>
+                  {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
+                </Typography>
+              </Box>
+              <DialogContentText id="alert-dialog-description"
+                sx={{
+                  flex: 1,
+                  overflowY: "auto",
+                }}>               
+                {beers[index]?.about}
+              </DialogContentText>
                 { loading && (
                   <Box
                     sx={{

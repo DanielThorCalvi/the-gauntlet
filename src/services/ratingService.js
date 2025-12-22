@@ -12,14 +12,12 @@ export async function addRating(beerId, userId, rating) {
 }
 
 export async function updateRating(beerId, userId, rating) {
-  console.log("updating rating", beerId, userId, rating);
   const { data, error } = await supabase
     .from('ratings')
     .update({ rating: rating })
     .eq('beer_id', beerId)
     .eq('user_id', userId)
     .select("*");
-  console.log("here",data, error);
   if (error) throw error;
 
   return data;
@@ -34,8 +32,6 @@ export async function getRatingByBeerAndUser(beerId, userId) {
     .eq('beer_id', beerId)
     .eq('user_id', userId) 
     .single();
-  
-      console.log("getRatingByBeerAndUser", data, error);
   if (error) return false;
 
   return true;

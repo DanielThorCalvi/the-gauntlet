@@ -17,6 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import ProfileDialog from './components/profileDialog.jsx';
 import Typography from '@mui/material/Typography';
+import StarIcon from '@mui/icons-material/Star';
+import Stack from '@mui/material/Stack';
 
 
 function App() {
@@ -34,7 +36,6 @@ function App() {
       const beers = await fetchBeers();
       setBeers(beers || [])
       const u = sessionStorage.getItem('user');
-      console.log('Logged in user:', u);
       setUser(u ? JSON.parse(u) : null);
       setRatings(u ? await fetchRatings(JSON.parse(u).id) : []);
       setLoading(false);
@@ -42,10 +43,6 @@ function App() {
 
     startup();
   }, [])
-
-  const getStars = (rating) => {
-    return `${rating}★`
-  }
 
   const openRateDialogForBeer = (index) => {
     setBeerIndex(index);
@@ -93,7 +90,7 @@ function App() {
                   <LogoutIcon />
               </IconButton>
               {user && <Typography color='secondary' variant='h5'>{user.name}</Typography>}
-              <Avatar alt="Remy Sharp" src={imageUrl} onClick={() => setOpenProfileDialog(true)} />
+              <Avatar variant="rounded" src={imageUrl} onClick={() => setOpenProfileDialog(true)} />
             </Toolbar>
         </AppBar>
       <Box sx={{ marginTop: '80px' }}>
@@ -107,7 +104,7 @@ function App() {
           
           return (
             <Box key={beer.id} className="beer" onClick={() => openRateDialogForBeer(index)}>
-              <h3>{beer.name}</h3>
+              <Typography variant='h5'>{beer.name}</Typography>
 
               {imageUrl && (
                 <img
@@ -116,7 +113,13 @@ function App() {
                 style={{ maxWidth: '250px' }}
                 />
               )}
-              <p>{beer.avg_rating ? getStars(beer.avg_rating) : 'No rating'}</p>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 1 }}>
+                {beer.avg_rating ? 
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Typography variant='h6'>{beer.avg_rating}</Typography><StarIcon color='trim' size="small"></StarIcon>
+                </Stack> : 
+                <Typography variant='h6'>No rating</Typography>  }
+              </Box>
               <Divider />
             </Box>
             )
