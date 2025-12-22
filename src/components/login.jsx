@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { login } from '../services/userService';
 import { fetchRatings } from '../services/ratingService.js';
+import { supabase } from '../lib/supabase.js';
 
 function Login({ user, setUser, loading, setLoading, setRatings }) {
   const [open, setOpen] = useState(false);
@@ -30,17 +31,35 @@ function Login({ user, setUser, loading, setLoading, setRatings }) {
 
   const handleLogin = async () => {
     setLoading(true);
-    const u = await login(userName, password);
-    await getRatings(u.id);
-    setUser(u);
-    handleClose();
-    setLoading(false);
+    try {
+      const u = await login(userName, password);
+      await getRatings(u.id);
+      setUser(u);
+      handleClose();
+      setLoading(false);
+    } catch (error) {
+      console.error('Login failed:', error);
+      setLoading(false);
+    }
   };
+
+  const getImageUrl = (imagePath) => {
+      if (!imagePath) return null;
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(imagePath);
+      return publicUrl;
+    }
 
   return (
     <>
-      <div>
-        <Button variant="contained" onClick={handleClickOpen}>Login</Button>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <img
+          src={getImageUrl('logo.PNG')}
+          alt="The Gauntlet Logo"
+          style={{ width: '300px' }}
+        />
+        <Button size="large" variant="contained" onClick={handleClickOpen}>Login</Button>
         <Dialog
           open={open}
           onClose={handleClose}
@@ -71,7 +90,7 @@ function Login({ user, setUser, loading, setLoading, setRatings }) {
             <Button onClick={handleLogin}>Log in</Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Box>
     </>
   )
 }

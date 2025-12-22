@@ -11,11 +11,14 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
-import StarIcon from "@mui/icons-material/Star";
+import SportsBarIcon from "@mui/icons-material/SportsBar";
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import { getRatingByBeerAndUser, updateRating, addRating, fetchRatings } from '../services/ratingService.js';
+import { fetchBeers } from '../services/beerService.js';
 
-function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers, user, ratings, setRatings }) {
+function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers, setBeers, user, ratings, setRatings }) {
 
   const[loading, setLoading] = useState(false);
 
@@ -48,7 +51,9 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
       await addRating(beerId, userId, rating);
     }
     let r = await fetchRatings(userId);
+    let b = await fetchBeers();
     setRatings(r);
+    setBeers(b);
     setLoading(false);
   }
   
@@ -63,22 +68,26 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             >
-            <AppBar sx={{ position: 'relative' }}>
-              <Toolbar>
+            <AppBar >
+              <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
                 <IconButton
                   edge="start"
-                  color="inherit"
+                  color="secondary"
                   onClick={handleClose}
                   aria-label="close"
                 >
                   <CloseIcon />
                 </IconButton>
-                <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                  {beers[index]?.name}
+                <Typography color='secondary' component="div" variant="h5" >
+                  The Gauntlet
                 </Typography>
+                <div></div>
               </Toolbar>
             </AppBar>
             <DialogContent sx={{  alignItems: "center", display: "flex", flexDirection: "column" }}>
+              <Typography variant="h4" gutterBottom sx={{ mt: 8, mb: 2 }}>
+                {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
+              </Typography>
               <img
                           src={getImageUrl(beers[index]?.image)}
                           alt={beers[index]?.name}
@@ -87,14 +96,15 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               <DialogContentText id="alert-dialog-description">               
                 {beers[index]?.about}
               </DialogContentText>
+     
                 { ratings && ratings.length > 0 && ratings.find(x => x.beer_id === beers[index]?.id) ?
                   <>
                     <Stack direction="row" spacing={1}>
                       {Array.from({ length: 5 }, (_, i) => {
                         if(i < ratings.find(x => x.beer_id === beers[index]?.id)?.rating) {
-                          return <StarIcon key={i} color='warning' />;
+                          return <SportsBarIcon fontSize="large" onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)} key={i} color='trim' />;
                         } else {
-                          return <StarIcon key={i} style={{ color: '#C0C0C0' }} />;
+                          return <SportsBarIcon fontSize="large" onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)} key={i} style={{ color: '#C0C0C0' }} />;
                         }
                       })}
                     </Stack>
@@ -102,8 +112,9 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   <>
                     <Stack direction="row" spacing={1}>
                       {Array.from({ length: 5 }, (_, i) => {
-                        return <StarIcon key={i}
+                        return <SportsBarIcon key={i}
                                         onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)}
+                                        fontSize='large'
                                         sx={{ 
                                           color:'#C0C0C0',
                                           cursor: 'pointer' 
@@ -112,6 +123,21 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                     </Stack>
                   </>
                 }
+                { loading && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      bgcolor: 'rgba(255,255,255,0.6)',
+                      borderRadius: 1,
+                    }}
+                  >
+                    <CircularProgress size={32} />
+                  </Box>
+                )}
             </DialogContent>
             <DialogActions sx={{ justifyContent: "space-between" }}>
               <IconButton disabled={index === 0} onClick={previousBeer} size='large'>

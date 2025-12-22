@@ -13,6 +13,11 @@ import Box from '@mui/material/Box';
 import { logout } from './services/userService.js' ;
 import { fetchRatings } from './services/ratingService.js';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
+import ProfileDialog from './components/profileDialog.jsx';
+import Typography from '@mui/material/Typography';
+
 
 function App() {
   const [beers, setBeers] = useState([])
@@ -21,6 +26,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [ratings, setRatings] = useState([]);
+  const [openProfileDialog, setOpenProfileDialog] = useState(false);
 
   useEffect(() => {
     async function startup() { 
@@ -38,10 +44,7 @@ function App() {
   }, [])
 
   const getStars = (rating) => {
-    const fullStars = rating;
-    const halfStar = 5 - fullStars > 0 ? 1 : 0;
-    const emptyStars = 5 - fullStars;
-    return '★'.repeat(fullStars) + '⯨'.repeat(halfStar) + '☆'.repeat(emptyStars);
+    return `${rating}★`
   }
 
   const openRateDialogForBeer = (index) => {
@@ -71,29 +74,26 @@ function App() {
   }
 
   if(user != null){
+    const imageUrl = user.image
+          ? supabase.storage
+          .from('beer-images')
+          .getPublicUrl(user.image)
+          .data.publicUrl
+          : null
     return (
       <>
     <Box>
       <AppBar>
             <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-              <Button
-                color="inherit"
+              <IconButton
+                color='secondary'
                 size='large'
-                startIcon={<LogoutIcon />}
                 onClick={logoutHandler}
-                variant="contained"
                 >
-                Logout
-              </Button>
-              {user && <h2>{user.name}</h2>}
-              <Button  color="inherit"
-                size="large"
-                sx={{alignItems: 'center'}}
-                variant="contained"
-                onClick={() => openRateDialogForBeer(0)}
-                endIcon={<GradeIcon />}>
-                Rate
-              </Button>
+                  <LogoutIcon />
+              </IconButton>
+              {user && <Typography color='secondary' variant='h5'>{user.name}</Typography>}
+              <Avatar alt="Remy Sharp" src={imageUrl} onClick={() => setOpenProfileDialog(true)} />
             </Toolbar>
         </AppBar>
       <Box sx={{ marginTop: '80px' }}>
@@ -130,7 +130,12 @@ function App() {
                   openRateDialog={openRateDialog} 
                   setOpenRateDialog={setOpenRateDialog}
                   ratings={ratings}
+                  setBeers={setBeers}
                   setRatings={setRatings} />
+      <ProfileDialog openProfileDialog={openProfileDialog} 
+                     setOpenProfileDialog={setOpenProfileDialog} 
+                     imgUrl={imageUrl} />
+      
     </>
     )
   }
