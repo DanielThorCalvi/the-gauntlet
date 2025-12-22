@@ -68,6 +68,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            scroll="paper"
             >
             <AppBar >
               <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
@@ -91,7 +92,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
             </AppBar>
             <DialogContent sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
               <Box sx={{
-                    height: 300,
+                    height: 250,
                     mt: 10,
                     mb: 2,
                     aspectRatio: "1 / 1",
@@ -142,13 +143,23 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
                 </Typography>
               </Box>
-              <DialogContentText id="alert-dialog-description"
+              <Box
                 sx={{
                   flex: 1,
+                  minHeight: 0,
                   overflowY: "auto",
-                }}>               
-                {beers[index]?.about}
-              </DialogContentText>
+                  WebkitOverflowScrolling: "touch",
+                  textAlign: "left",
+                }}
+              >
+                <DialogContentText id="alert-dialog-description"
+                  sx={{
+                    flex: 1,
+                    overflowY: "auto",
+                  }}>               
+                  {beers[index]?.about}
+                </DialogContentText>
+              </Box>
                 { loading && (
                   <Box
                     sx={{

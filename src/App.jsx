@@ -116,9 +116,8 @@ function App() {
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 1 }}>
                 {beer.avg_rating ? 
                 <Stack direction="row" alignItems="center" spacing={1}>
-                  <Typography variant='h6'>{beer.avg_rating}</Typography><StarIcon color='trim' size="small"></StarIcon>
-                </Stack> : 
-                <Typography variant='h6'>No rating</Typography>  }
+                <Typography variant='h6'>{beer.avg_rating}</Typography><StarIcon color='secondary' size="small"></StarIcon>
+              </Stack> : <Typography variant='h6'>No rating</Typography>  }
               </Box>
               <Divider />
             </Box>
