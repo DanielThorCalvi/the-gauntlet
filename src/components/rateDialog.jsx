@@ -68,7 +68,6 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            scroll="paper"
             >
             <AppBar >
               <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
@@ -91,14 +90,6 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               </Toolbar>
             </AppBar>
             <DialogContent sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
-              <Box sx={{
-                    height: 250,
-                    mt: 10,
-                    mb: 2,
-                    aspectRatio: "1 / 1",
-                    overflow: "hidden",
-                    bgcolor: "grey.200",
-                  }}>
                 <img
                   src={getImageUrl(beers[index]?.image)}
                   alt={beers[index]?.name}
@@ -108,8 +99,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                     objectFit: "cover", // crop
                     display: "block",
                   }}
-                />
-              </Box>
+                />    
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2, mb: 2 }}> 
                 { ratings && ratings.length > 0 && ratings.find(x => x.beer_id === beers[index]?.id) ?
                   <>
@@ -143,23 +133,11 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  flex: 1,
-                  minHeight: 0,
-                  overflowY: "auto",
-                  WebkitOverflowScrolling: "touch",
-                  textAlign: "left",
-                }}
-              >
-                <DialogContentText id="alert-dialog-description"
-                  sx={{
-                    flex: 1,
-                    overflowY: "auto",
-                  }}>               
-                  {beers[index]?.about}
-                </DialogContentText>
-              </Box>
+              <DialogContentText id="alert-dialog-description">               
+                {beers[index]?.about}
+                {beers[index]?.about}
+                {beers[index]?.about}
+              </DialogContentText>
                 { loading && (
                   <Box
                     sx={{
