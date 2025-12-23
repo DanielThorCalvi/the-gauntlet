@@ -103,17 +103,15 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               </Toolbar>
             </AppBar>
             <DialogContent sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
+              <Box sx={{ mt: 10 }}>
                 <img
                   src={getImageUrl(beers[index]?.image)}
                   alt={beers[index]?.name}
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover", // crop
-                    display: "block",
+                    width: "300px",
                   }}
                 />
-      
+              </Box>    
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2, mb: 2 }}> 
                 { ratings && ratings.length > 0 && ratings.find(x => x.beer_id === beers[index]?.id) ?
                   <>
