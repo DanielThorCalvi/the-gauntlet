@@ -103,12 +103,12 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               </Toolbar>
             </AppBar>
             <DialogContent sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
-              <Box sx={{ mt: 10 }}>
+              <Box>
                 <img
                   src={getImageUrl(beers[index]?.image)}
                   alt={beers[index]?.name}
                   style={{
-                    width: "300px",
+                    width: "100vw",
                   }}
                 />
               </Box>    
