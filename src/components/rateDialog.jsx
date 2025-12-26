@@ -122,9 +122,9 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                     <Stack direction="row" spacing={1}>
                       {Array.from({ length: 5 }, (_, i) => {
                         if(i < ratings.find(x => x.beer_id === beers[index]?.id)?.rating) {
-                          return <SportsBarIcon fontSize="large" onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)} key={i} color='trim' />;
+                          return <SportsBarIcon onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)} key={i} color='trim' sx={{ fontSize: 50 }} />;
                         } else {
-                          return <SportsBarIcon fontSize="large" onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)} key={i} style={{ color: '#C0C0C0' }} />;
+                          return <SportsBarIcon onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)} key={i} sx={{ fontSize: 50 }} style={{ color: '#C0C0C0' }} />;
                         }
                       })}
                     </Stack>
@@ -134,10 +134,10 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                       {Array.from({ length: 5 }, (_, i) => {
                         return <SportsBarIcon key={i}
                                         onClick={() => rateBeer(beers[index]?.id, user.id, i + 1)}
-                                        fontSize='large'
                                         sx={{ 
                                           color:'#C0C0C0',
-                                          cursor: 'pointer' 
+                                          cursor: 'pointer',
+                                          fontSize: 50,
                                         }} />;    
                       })}
                     </Stack>
