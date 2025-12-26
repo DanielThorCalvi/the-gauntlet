@@ -102,17 +102,21 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                 </IconButton>
               </Toolbar>
             </AppBar>
-            <DialogContent sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
-              <Box>
-                <img
+            <DialogContent sx={{ 
+                            alignItems: "center", 
+                            display: "flex", 
+                            flexDirection: "column",
+                            p: 0
+                          }}>
+              <Box component="img"
                   src={getImageUrl(beers[index]?.image)}
                   alt={beers[index]?.name}
                   style={{
                     width: "100vw",
-                  }}
-                />
+                    display: 'block',
+                  }}>
               </Box>    
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, mt: 2, mb: 2 }}> 
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, my: 6 }}> 
                 { ratings && ratings.length > 0 && ratings.find(x => x.beer_id === beers[index]?.id) ?
                   <>
                     <Stack direction="row" spacing={1}>
@@ -140,29 +144,29 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   </>
                 }
               </Box>
-              <Box sx={{ mb: 2, textAlign: "left", width: "100%" }}>
-                <Typography textAlign="left" variant="h4" gutterBottom sx={{ mt: 6, mb: 2 }}>
+              <Box sx={{ textAlign: "left", px: 2 }}>
+                <Typography textAlign="left" variant="h4" sx={{ mb: 2}}>
                   {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
                 </Typography>
-              </Box>
               <DialogContentText id="alert-dialog-description">               
                 {beers[index]?.about}
               </DialogContentText>
-                { loading && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: 'rgba(255,255,255,0.6)',
-                      borderRadius: 1,
-                    }}
-                  >
-                    <CircularProgress size={32} />
-                  </Box>
-                )}
+              </Box>
+              { loading && (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: 'rgba(255,255,255,0.6)',
+                    borderRadius: 1,
+                  }}
+                >
+                  <CircularProgress size={32} />
+                </Box>
+              )}
             </DialogContent>
             <DialogActions sx={{ justifyContent: "space-between" }}>
               <IconButton disabled={index === 0} onClick={previousBeer} size='large'>
