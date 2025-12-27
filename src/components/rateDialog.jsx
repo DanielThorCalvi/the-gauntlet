@@ -19,11 +19,16 @@ import { getRatingByBeerAndUser, updateRating, addRating, fetchRatings } from '.
 import { fetchBeers } from '../services/beerService.js';
 import MapIcon from '@mui/icons-material/Map';
 import ProfileDialog from './profileDialog.jsx';
+import CommentIcon from '@mui/icons-material/Comment';
+import CommentDialog from './commentDialog.jsx';
+import { fetchComments } from '../services/commentService.js';
 
 function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers, setBeers, user, ratings, setRatings }) {
 
   const[loading, setLoading] = useState(false);
   const [openProfileDialog, setOpenProfileDialog] = useState(false);
+  const [openCommentDialog, setOpenCommentDialog] = useState(false);
+  const [comments, setComments] = useState([]);
 
   const handleClose = () => {
     setOpenRateDialog(false);
@@ -52,6 +57,12 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
 
   const openMap = () => {
     setOpenProfileDialog(true);
+  }
+
+  const openComments = async () => {
+    const c = await fetchComments(beers[index]?.id);
+    setComments(c);
+    setOpenCommentDialog(true);
   }
 
   const rateBeer = async (beerId, userId, rating) => {
@@ -87,8 +98,9 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   color="secondary"
                   onClick={handleClose}
                   aria-label="close"
+                  sx={{ fontSize: 30 }}
                 >
-                  <CloseIcon />
+                  <CloseIcon fontSize='inherit' />
                 </IconButton>
                 <Typography color='secondary' component="div" variant="h5" >
                   The Gauntlet
@@ -97,8 +109,9 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   color="secondary"
                   aria-label="map"
                   onClick={openMap}
+                  sx={{ fontSize: 30 }}
                 >
-                  <MapIcon />
+                  <MapIcon fontSize='inherit'/>
                 </IconButton>
               </Toolbar>
             </AppBar>
@@ -148,9 +161,10 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                 <Typography textAlign="left" variant="h4" sx={{ mb: 2}}>
                   {index+1}. {beers[index]?.name} ({beers[index]?.abv}% ABV)
                 </Typography>
-              <DialogContentText id="alert-dialog-description">               
-                {beers[index]?.about}
-              </DialogContentText>
+                <DialogContentText id="alert-dialog-description">               
+                  {beers[index]?.about}
+                </DialogContentText>
+              {/* LOADING */}
               </Box>
               { loading && (
                 <Box
@@ -169,10 +183,13 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               )}
             </DialogContent>
             <DialogActions sx={{ justifyContent: "space-between" }}>
-              <IconButton disabled={index === 0} onClick={previousBeer} size='large'>
+              <IconButton sx={{ fontSize: 30 }} disabled={index === 0} onClick={previousBeer} size='large'>
                 <ArrowBackIcon  fontSize="inherit" />
               </IconButton>
-              <IconButton disabled={index === beers.length - 1} onClick={nextBeer} size='large'>
+              <IconButton sx={{ fontSize: 30 }} onClick={openComments}> 
+                <CommentIcon fontSize="inherit" />
+              </IconButton>
+              <IconButton sx={{ fontSize: 30 }} disabled={index === beers.length - 1} onClick={nextBeer} size='large'>
                 <ArrowForwardIcon fontSize="inherit"   />
               </IconButton>
             </DialogActions>
@@ -181,6 +198,13 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
           <ProfileDialog openProfileDialog={openProfileDialog} 
                         setOpenProfileDialog={setOpenProfileDialog} 
                         imgUrl={imageUrl} />
+
+          <CommentDialog openDialog={openCommentDialog}
+                        beerId={beers[index]?.id}
+                        setOpenDialog={setOpenCommentDialog}
+                        comments={comments}
+                        setComments={setComments} />
+
         </div>
       }
     </>
