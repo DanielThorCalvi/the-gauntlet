@@ -19,6 +19,7 @@ import ProfileDialog from './components/profileDialog.jsx';
 import Typography from '@mui/material/Typography';
 import SportsBarIcon from '@mui/icons-material/SportsBar';
 import Stack from '@mui/material/Stack';
+import Loading from './components/loading.jsx';
 
 
 function App() {
@@ -56,9 +57,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="App">
-        LOADING...
-      </div>
+      <Loading />
     )
   }
 

@@ -12,10 +12,10 @@ const theme = createTheme({
       contrastText: '#ffd61fff',
     },
     secondary: {
-      main: '#ffd61fff', // purple
+      main: '#ffd61fff',
     },
     trim: {
-      main: '#ffb11fff', // orange
+      main: '#ffb11fff',
     },
   },
   typography: {

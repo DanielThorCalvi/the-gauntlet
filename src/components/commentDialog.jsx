@@ -9,6 +9,7 @@ import { addComment } from '../services/commentService.js';
 import Avatar from '@mui/material/Avatar';
 import { supabase } from '../lib/supabase.js';
 import SendIcon from '@mui/icons-material/Send';
+import { format } from 'date-fns'
 
 function CommentDialog({ openDialog, setOpenDialog, comments, setComments, beerId }) {
 
@@ -30,13 +31,6 @@ function CommentDialog({ openDialog, setOpenDialog, comments, setComments, beerI
         .getPublicUrl(imagePath);
       return publicUrl;
     }
-
-  function formatDate(date) {
-    return new Intl.DateTimeFormat("en-GB", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(date));
-  }
 
   const [commentText, setCommentText] = useState('');
   const isCommentValid = commentText.trim().length > 0;
@@ -84,17 +78,17 @@ function CommentDialog({ openDialog, setOpenDialog, comments, setComments, beerI
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
-                          mb:1
+                          mb:0
                         }}>
                         <Avatar sx={{ width: 48, height: 48 }}src={getImageUrl(comment.users.image)}></Avatar>
-                        <Typography variant='subtitle2'>
+                        <Typography variant='subtitle1' sx={{ fontWeight: 'bold'}}>
                           {comment.users.name}
                         </Typography>
-                        <Typography variant='body2'  sx={{ ml: "auto", whiteSpace: "nowrap" }}>
-                          {formatDate(comment.created_at)}
+                        <Typography variant='body2'  sx={{ ml: "auto", whiteSpace: "nowrap", color: 'gray' }}>
+                          {format(comment.created_at, "dd.MM.yy HH:mm")}
                         </Typography>
                       </Box>
-                      <Typography sx={{ pl: 7 }}>
+                      <Typography variant='body1' sx={{ pl: 7 }}>
                         {comment.comment}
                       </Typography>             
                     </Box>

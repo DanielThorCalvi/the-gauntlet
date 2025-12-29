@@ -22,6 +22,7 @@ import ProfileDialog from './profileDialog.jsx';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentDialog from './commentDialog.jsx';
 import { fetchComments } from '../services/commentService.js';
+import Loading from './loading.jsx';
 
 function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers, setBeers, user, ratings, setRatings }) {
 
@@ -35,8 +36,8 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
   };
 
   const imageUrl = supabase.storage
-          .from('beer-images')
-          .getPublicUrl('test_beer.jpg')
+          .from('images')
+          .getPublicUrl('map.png')
           .data.publicUrl
 
   const getImageUrl = (imagePath) => {
@@ -126,6 +127,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
                   alt={beers[index]?.name}
                   style={{
                     width: "100vw",
+                    maxWidth: "500px",
                     display: 'block',
                   }}>
               </Box>    
@@ -167,19 +169,7 @@ function RateDialog({ index, setIndex, openRateDialog, setOpenRateDialog, beers,
               {/* LOADING */}
               </Box>
               { loading && (
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'rgba(255,255,255,0.6)',
-                    borderRadius: 1,
-                  }}
-                >
-                  <CircularProgress size={32} />
-                </Box>
+                <Loading />
               )}
             </DialogContent>
             <DialogActions sx={{ justifyContent: "space-between" }}>

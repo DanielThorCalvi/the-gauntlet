@@ -53,40 +53,41 @@ function Login({ user, setUser, loading, setLoading, setRatings }) {
   return (
     <>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-        <img
+        <Box
+          component="img"
           src={getImageUrl('logo.PNG')}
           alt="The Gauntlet Logo"
-          style={{ width: '300px', borderRadius: '8px' }}
+          sx={{ backgroundColor: "primary.main", width: '300px', borderRadius: '8px', p: 2 }}
         />
-        <Button size='large' fullWidth variant="contained" onClick={handleClickOpen}>Login</Button>
+        <Button size='large' fullWidth variant="contained" onClick={handleClickOpen}>Log in</Button>
         <Dialog
           open={open}
           onClose={handleClose}
         >
-          <DialogTitle>
-            {"Log In"}
+          <DialogTitle sx={{ backgroundColor: "primary.main", color: "secondary.main"}}>
+            Enter the Gauntlet
           </DialogTitle>
           <DialogContent sx={{alignItems: 'center'}}>
               <Box
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '25ch' }, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}
+                sx={{ '& > :not(style)': { m: 1, mt: 2, width: '25ch' }, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}
                 noValidate
                 autoComplete="off"
               >
                 <TextField id="standard-basic" 
                           label="Username" 
-                          variant="standard"
+                          variant="outlined"
                           value={userName}
                           onChange={(e) => setUserName(e.target.value)} />
                 <TextField label="Password" 
-                          variant="standard"
+                          variant="outlined"
                           type='password'
                           value={password}
                           onChange={(e) => setPassword(e.target.value)} />
               </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleLogin}>Log in</Button>
+            <Button size='large' fullWidth variant="contained" onClick={handleLogin} sx={{ mx: 3, mb: 2}}>Log in</Button>
           </DialogActions>
         </Dialog>
       </Box>
